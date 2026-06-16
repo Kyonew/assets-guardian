@@ -1,0 +1,81 @@
+name: 🐛 Bug Report
+description: Report a reproducible bug in Assets Guardian.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! A minimal reproduction case, the smallest possible config or command that triggers the bug, is the most helpful thing you can include.
+
+        > ⚠️ **Never paste credentials, tokens, or internal hostnames.** Redact config snippets before submitting.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      options:
+        - label: I searched the existing issues and this bug has not been reported yet.
+          required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands, inputs, and config snippets (without credentials).
+      placeholder: |
+        1. Configure `config.yml` with ...
+        2. Run `uv run assets-guardian sync ...`
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What actually happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant log output, if any. This will be automatically formatted as code.
+      render: shell
+
+  - type: dropdown
+    id: run-mode
+    attributes:
+      label: How do you run Assets Guardian?
+      options:
+        - Docker container
+        - Standalone install (command line on the host)
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Assets Guardian version
+      description: Output of `uv run assets-guardian --version`.
+      placeholder: "1.2.0"
+    validations:
+      required: true
+
+  - type: input
+    id: host-os
+    attributes:
+      label: Host OS
+      placeholder: "Ubuntu 24.04 / macOS 15 / Windows 11 + WSL2"
+    validations:
+      required: true

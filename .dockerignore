@@ -1,0 +1,46 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+.gitleaks.toml
+
+# Python
+.venv/
+__pycache__/
+*.egg-info/
+dist/
+build/
+
+# Dev tools (IDE)
+.vscode/
+.devcontainer/
+.pre-commit-config.yaml
+.gitlab-ci.yml
+Makefile
+
+# Windows Zone.Identifier metadata files
+*Zone.Identifier
+
+# Caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Tests & docs
+tests/
+docs/
+benchmarks/
+MagicMock/
+
+# Outputs & logs
+outputs/
+logs/
+
+# Secrets
+.env*
+config/
+
+# Local Assets Guardian cache
+.assets-guardian_cache/

@@ -1,0 +1,46 @@
+# Python
+.venv/
+__pycache__/
+*.egg-info/
+dist/
+build/
+
+# Dev tools (IDE)
+.vscode/
+
+# Windows Zone.Identifier metadata files
+*Zone.Identifier
+
+# Caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Tests & docs
+# Benchmarks [TMP]
+benchmarks/fixtures/
+# Benchmarks [TMP]
+benchmarks/results/
+MagicMock/
+
+# Outputs & logs
+outputs/*
+!outputs/.gitkeep
+logs/*
+!logs/.gitkeep
+
+# Secrets
+.env*
+!.env.template
+config/config.yml
+config/rules_config.yml
+config/employees.json
+
+# Local Assets Guardian cache
+.assets-guardian_cache/
+
+# Sphinx
+docs/_build/
+docs/src/stubs/

@@ -1,0 +1,16 @@
+[
+    {
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@company.com",
+        "username": "jdoe",
+        "profiles": "Marketing, Finance"
+    },
+    {
+        "first_name": "Ada",
+        "last_name": "Lovelace",
+        "email": "ada.lovelace@company.com",
+        "username": "alovelace",
+        "profiles": "R&D, Support"
+    }
+]

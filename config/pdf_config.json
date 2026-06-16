@@ -1,0 +1,66 @@
+{
+    "settings": {
+        "show_checkboxes": true,
+        "checkbox_size": 3.5,
+        "timezone": "Europe/Paris"
+    },
+    "colors": {
+        "CRITICAL": {
+            "r": 255,
+            "g": 0,
+            "b": 0
+        },
+        "DANGER": {
+            "r": 255,
+            "g": 69,
+            "b": 0
+        },
+        "WARNING": {
+            "r": 255,
+            "g": 165,
+            "b": 0
+        },
+        "INFO": {
+            "r": 0,
+            "g": 122,
+            "b": 255
+        },
+        "header_bg": {
+            "r": 208,
+            "g": 208,
+            "b": 208
+        },
+        "text": {
+            "r": 0,
+            "g": 0,
+            "b": 0
+        }
+    },
+    "fonts": {
+        "title": {
+            "family": "helvetica",
+            "style": "B",
+            "size": 16
+        },
+        "subtitle": {
+            "family": "helvetica",
+            "style": "B",
+            "size": 14
+        },
+        "heading": {
+            "family": "helvetica",
+            "style": "B",
+            "size": 12
+        },
+        "body": {
+            "family": "helvetica",
+            "style": "",
+            "size": 10
+        },
+        "severity": {
+            "family": "helvetica",
+            "style": "B",
+            "size": 18
+        }
+    }
+}

@@ -1,0 +1,46 @@
+env: "dev"
+
+author:
+  fullname: "First name LAST NAME"
+  email: "...@example.com"
+
+logging:
+  console_level: "info"
+  file_level: "debug"
+  file-basename: "assets-guardian"
+  max-size: 10 # MB
+  max-files: 3
+
+paths:
+  excel: "local:outputs/assets_guardian.xlsx"
+  pdf: "local:outputs/audit_report.pdf"
+  rules: "local:config/rules_config.yml"
+  employees: "local:config/employees.json"
+
+cache:
+  batch_size: 64
+  cache_dir: ".assets-guardian_cache"
+
+gitlab:
+  prod:
+    url: "https://gitlab_prod.company.com/api/v4"
+    credentials:
+      personnal_access_token: "${GITLAB_PROD_TOKEN}" # resolved from environment variable
+  test:
+    url: "https://gitlab_test.company.com/api/v4"
+    credentials:
+      personnal_access_token: "${GITLAB_TEST_TOKEN}" # resolved from environment variable
+
+dolibarr:
+  my_favorite_instance:
+    url: "https://dolibarr.company.com/api/index.php"
+    credentials:
+      dolapikey: "${DOLIBARR_TOKEN}" # resolved from environment variable
+
+microsoft365:
+  main:
+    url: "https://graph.microsoft.com/.default"
+    credentials:
+      tenant_id: "${M365_MAIN_TENANT_ID}" # resolved from environment variable
+      application_id: "${M365_MAIN_APPLICATION_ID}" # resolved from environment variable
+      client_secret: "${M365_MAIN_CLIENT_SECRET}" # resolved from environment variable

@@ -1,0 +1,74 @@
+[extend]
+useDefault = true # Extends the default gitleaks configuration (all built-in rules)
+
+[allowlist]
+description = "Chemins et fichiers ignorés par gitleaks"
+paths = [
+    '''uv\.lock''',
+    '''config/.*\.template$''',
+]
+
+[[rules]]
+id = "custom-email-in-config"
+description = "Adresse email assignée à une variable de configuration ou d'environnement"
+regex = '''(?i)(?:email|mail|login|contact|from|to|recipient|sender)\s*[=:]\s*['"]?[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}['"]?'''
+tags = ["email", "pii"]
+
+  [rules.allowlist]
+  description = "Domaines d'exemple, adresses no-reply et métadonnées de packaging"
+  paths = [
+    '''pyproject\.toml''',
+    '''setup\.py''',
+    '''setup\.cfg''',
+  ]
+  regexes = [
+    '''(?i)@example\.(?:com|org|net)''',
+    '''(?i)@test\.(?:com|org)''',
+    '''(?i)noreply@''',
+    '''(?i)no-reply@''',
+  ]
+
+[[rules]]
+id = "custom-french-phone"
+description = "Numéro de téléphone français (format national ou international)"
+regex = '''(?:(?:\+|00)33|0)\s?[1-9](?:[\s.\-]?\d{2}){4}'''
+entropy = 1.5
+tags = ["phone", "pii", "french"]
+
+  [rules.allowlist]
+  description = "Numéros factices courants dans la documentation"
+  regexes = [
+    '''0[0-9]00\s?00\s?00\s?00''',
+    '''(?:\+33|0)6\s?12\s?34\s?56\s?78''',
+  ]
+
+[[rules]]
+id = "custom-hardcoded-password"
+description = "Mot de passe potentiellement codé en dur dans une assignation"
+regex = '''(?i)(?:password|passwd|pwd|pass|secret|credential)\s*[=:]\s*['"][^'"\s]{8,}['"]'''
+entropy = 2.5
+tags = ["password", "credentials"]
+
+  [rules.allowlist]
+  description = "Valeurs placeholder et références à des variables d'environnement"
+  regexes = [
+    '''(?i)(?:example|sample|dummy|placeholder|changeme|change.me|your.password|password.here|secret.here|todo)''',
+    '''\$\{[^}]+\}''', # ${VAR}
+    '''"?\$[A-Z][A-Z0-9_]+"?''', # $CI_VAR ou "$CI_VAR"
+    '''os\.(?:environ|getenv)''',
+  ]
+
+[[rules]]
+id = "custom-database-url-with-creds"
+description = "URL de connexion à une base de données contenant des identifiants en clair"
+regex = '''(?i)(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|redis|mssql|amqp)://[^:@\s"']+:[^@\s"']+@[^\s"']+'''
+tags = ["database", "credentials"]
+
+  [rules.allowlist]
+  description = "Mots de passe placeholder et références à des variables d'environnement"
+  regexes = [
+    '''(?i)://[^@]*:(?:password|passwd|changeme|secret|example|admin|root|test|dummy|placeholder)@''',
+    '''\$\{[^}]+\}''',
+    '''"?\$[A-Z][A-Z0-9_]+"?''',
+    '''\{\{[^}]+\}\}''',
+  ]

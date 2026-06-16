@@ -1,0 +1,8 @@
+# Configuration of the "New issue" chooser.
+# Blank issues stay enabled so questions can be filed freely
+# (see the "Getting Help" section of CONTRIBUTING.md).
+blank_issues_enabled: true
+contact_links:
+  - name: 🆘 Getting Help
+    url: https://github.com/apizee/assets-guardian/blob/main/CONTRIBUTING.md#-getting-help
+    about: Read the docs first (ARCHITECTURE.md, PLUGIN.md), then open a blank issue with your question.

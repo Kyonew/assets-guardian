@@ -1,0 +1,34 @@
+vulnerabilities:
+  - id: CVE-2025-69720
+    statement: "infocmp never invoked. No fix in Debian 13."
+    expired_at: 2026-12-31
+  - id: CVE-2026-42496
+    statement: "perl never invoked. No fix in Debian 13."
+    expired_at: 2026-12-31
+  - id: CVE-2026-8376
+    statement: "perl never invoked. No fix in Debian 13."
+    expired_at: 2026-12-31
+  - id: CVE-2026-42497
+    statement: "perl never invoked. No fix in Debian 13."
+    expired_at: 2026-12-31
+  - id: CVE-2026-48962
+    statement: "perl never invoked. No fix in Debian 13."
+    expired_at: 2026-12-31
+  - id: CVE-2026-9538
+    statement: "perl never invoked. No fix in Debian 13."
+    expired_at: 2026-12-31
+  - id: CVE-2026-48959
+    statement: "perl never invoked."
+    expired_at: 2026-12-31
+  - id: CVE-2026-11822
+    statement: "sqlite never invoked."
+    expired_at: 2026-12-31
+  - id: CVE-2026-11824
+    statement: "sqlite never invoked."
+    expired_at: 2026-12-31
+  - id: CVE-2026-41992
+    statement: "gzip never invoked."
+    expired_at: 2026-12-31
+  - id: CVE-2026-54369
+    statement: "libacl1 never invoked."
+    expired_at: 2026-12-31

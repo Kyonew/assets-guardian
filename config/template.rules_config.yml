@@ -1,0 +1,43 @@
+define: &default_rules
+  DEFAULT-001:
+    description: "Account without MFA enabled."
+    severity: "CRITICAL"
+  DEFAULT-002:
+    description: "Inactivity threshold exceeded for an account."
+    severity: "HIGH"
+    inactivity_threshold_days_warning: 90
+    inactivity_threshold_days_danger: 180
+    inactivity_threshold_days_critical: 365
+  DEFAULT-003:
+    description: "Account with excessive permissions."
+    severity: "HIGH"
+  DEFAULT-004:
+    description: "Connection from an unusual location."
+    company_network_ip: "192.168.1.2"
+
+gitlab:
+  <<: *default_rules
+  COMPLIANCE-001:
+    description: "Connection from an unusual location."
+    severity: "HIGH"
+  MATRIX-001:
+    description: "User not in the right group"
+    severity: "HIGH"
+  COMPARE-001:
+    name: "Additions of GitLab users"
+    severity: "INFO"
+  COMPARE-002:
+    name: "Deletions of GitLab users"
+    severity: "WARNING"
+  COMPARE-003:
+    name: "gitlab status changes"
+    severity: "WARNING"
+  COMPARE-004:
+    name: "gitlab privilege changes"
+    severity: "DANGER"
+
+dolibarr:
+  <<: *default_rules
+
+microsoft365:
+  <<: *default_rules

@@ -1,0 +1,182 @@
+[project]
+name = "assets-guardian"
+version = "0.1.1"
+description = "Assets Guardian is a Identity and Access Management (IAM) governance tool"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "GPL-3.0-only" # SPDX expression (PEP 639); see LICENSE.txt
+license-files = ["LICENSE.txt"]
+authors = [{ name = "Apizee" }]
+maintainers = [{ name = "Kévin HODÉ" }]
+dependencies = [
+    "click>=8.4.1", # CLI framework (commands, options, automatic help)
+    "pyyaml>=6.0.3", # YAML configuration file parsing
+    "openpyxl>=3.1.5", # Excel report generation (.xlsx)
+    "fpdf2>=2.8.7", # PDF report generation
+    "requests>=2.34.2", # HTTP client for connectors (GitLab, M365, OVH, etc.)
+    "mysql-connector-python>=9.7.0", # MySQL connector (Dolibarr)
+]
+
+[project.scripts]
+assets-guardian = "assets_guardian.cli.main:cli"
+
+# ──────────────────────────────────────────────
+# Dependency groups (PEP 735) - resolved by uv
+# ──────────────────────────────────────────────
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3", # Test framework
+    "pytest-cov>=7.1.0", # Coverage measurement plugin for pytest
+    "pytest-mock>=3.15.1", # Mocking fixtures for pytest (mocker, patch)
+    "responses>=0.26.1", # Mock HTTP calls in tests
+    "mypy>=2.1.0", # Static type checker
+    "bandit>=1.9.4", # SAST security analysis
+    "radon>=6.0.1", # Cyclomatic complexity metrics
+    "pre-commit>=4.6.0", # Not a purely Python dependency, placed here for easy installation
+    "ruff>=0.15.16", # Linter and formatter (replaces pylint, black, flake8, isort)
+    "types-PyYAML>=6.0.12.20260518", # Type stubs for mypy
+    "types-requests>=2.33.0.20260518", # Type stubs for mypy
+    "types-openpyxl>=3.1.5.20260518", # Type stubs for mypy
+    "Faker>=40.21.0", # Fake data generation for tests
+]
+docs = [
+    "sphinx>=9.1.0", # Documentation generator (HTML, PDF, etc.)
+    "sphinx-rtd-theme>=3.1.0", # Read the Docs theme for Sphinx
+    "sphinx-click>=6.2.0", # Automatically generates CLI documentation from Click
+    "myst-parser>=5.1.0", # Allows including Markdown files in Sphinx
+    "sphinxcontrib-mermaid>=2.0.2", # Mermaid diagram support in Sphinx
+]
+
+# ──────────────────────────────────────────────
+# Ruff - lint + format (replaces pylint, black, flake8, isort)
+# ──────────────────────────────────────────────
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = [ # enabled rules cf. https://docs.astral.sh/ruff/rules/
+    "E", # pycodestyle - style errors
+    "W", # pycodestyle - warnings
+    "F", # pyflakes - logic errors
+    "I", # isort - import sorting
+    "N", # pep8-naming - naming conventions
+    "UP", # pyupgrade - modern Python syntax
+    "B", # flake8-bugbear - common pitfalls
+    "A", # flake8-builtins - forbids shadowing builtins
+    "S", # flake8-bandit - security rules
+    "T20", # flake8-print - forbids `print` (use the logger)
+    "SIM", # flake8-simplify - idiomatic simplifications
+    "RUF", # Ruff-specific - opinionated rules not covered by other linters
+    "C4", # flake8-comprehensions - idiomatic comprehensions
+    "PTH", # flake8-use-pathlib - prefer pathlib over os.path
+    "RET", # flake8-return - consistent `return` statements
+    "ARG", # flake8-unused-arguments - unused arguments
+    "DTZ", # flake8-datetimez - datetime always with timezone (reliable audit trail)
+    "LOG", # flake8-logging - correct usage of the logging module
+    "G", # flake8-logging-format - correct log message formatting
+    "TRY", # tryceratops - robust exception handling (critical for connectors)
+    "PIE", # flake8-pie - miscellaneous small improvements
+    "TC", # flake8-type-checking - typing-only imports inside TYPE_CHECKING
+    "ERA", # eradicate - detects commented-out code
+]
+ignore = [
+    "S101", # checks for uses of the assert keyword
+    "S603", # check for method calls that initiate a subprocess without a shell
+    "TRY003", # checks for long exception messages that are not defined in the exception class itself
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "ARG001", # checks for the presence of unused arguments in function definitions
+    "ARG002", # checks for the presence of unused arguments in instance method definitions
+    "E501", # checks for lines that exceed the specified maximum character length
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+# exclude = ["tests/**/*.py"]
+
+# ──────────────────────────────────────────────
+# Mypy - strict static typing
+# ──────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.13"
+mypy_path = "src"
+packages = ["assets_guardian"]
+strict = true # enables warn_return_any, disallow_untyped_defs, check_untyped_defs, etc.
+
+[[tool.mypy.overrides]]
+module = [ # third-party modules without type stubs (or with partial typing)
+    "mysql.connector.*",
+    # "fpdf.*", # fpdf2 >= 2.7 is natively typed, override unnecessary
+]
+ignore_missing_imports = true
+
+# ──────────────────────────────────────────────
+# Pytest
+# ──────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+    "--tb=short", # compact traceback
+    "-ra", # summary of non-passed tests at end of run
+    "--ignore=src/assets_guardian/core/reporting/excel",
+    "--ignore=src/assets_guardian/core/reporting/pdf",
+    "--ignore=src/assets_guardian/core/domain/engines/excel_engine.py",
+    "--ignore=src/assets_guardian/core/domain/ports/pdf_builders.py",
+    "--ignore=src/assets_guardian/core/domain/ports/sheet_builders.py",
+    "--ignore=src/assets_guardian/core/domain/registry/pdf_builder_registry.py",
+    "--ignore=src/assets_guardian/core/domain/registry/sheet_builder_registry.py",
+    "--ignore=src/assets_guardian/plugins",
+]
+
+# ──────────────────────────────────────────────
+# Coverage - minimum threshold 80%
+# ──────────────────────────────────────────────
+[tool.coverage.run] # controls data collection (which sources to measure, enabling branch coverage, which files to exclude)
+source_pkgs = ["assets_guardian"]
+branch = true # also measures branch coverage (if/else, try/except)
+omit = [
+    "*/__init__.py",
+    "src/assets_guardian/core/reporting/excel/*",
+    "src/assets_guardian/core/reporting/pdf/*",
+    "src/assets_guardian/core/domain/engines/excel_engine.py",
+    "src/assets_guardian/core/domain/registry/pdf_builder_registry.py",
+    "src/assets_guardian/core/domain/registry/sheet_builder_registry.py",
+    "src/assets_guardian/core/domain/ports/pdf_builders.py",
+    "src/assets_guardian/core/domain/ports/sheet_builders.py",
+    "src/assets_guardian/plugins/*",
+]
+
+[tool.coverage.report] # controls the presentation and evaluation of results.
+precision = 2 # shows percentages with 2 decimal places in the report
+show_missing = true # displays line numbers not covered by tests in the report
+fail_under = 100 # build fails if coverage drops below this threshold
+skip_empty = true # ignores files with no executable code
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@abstractmethod",
+    "if __name__ == .__main__.",
+]
+
+# ──────────────────────────────────────────────
+# Bandit - SAST analysis (security)
+# ──────────────────────────────────────────────
+[tool.bandit]
+exclude_dirs = ["tests"]
+# skips = ["B101"] # `assert` allowed (consistent with ruff S101)
+
+# ──────────────────────────────────────────────
+# Build - hatchling
+# ──────────────────────────────────────────────
+[build-system]
+requires = ["hatchling"] # use hatchling when `uv build` was called
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/assets_guardian"]

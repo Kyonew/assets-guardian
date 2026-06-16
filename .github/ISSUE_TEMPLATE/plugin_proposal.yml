@@ -1,0 +1,66 @@
+name: 🧩 Plugin Proposal
+description: Propose the integration of a new IAM source (GitLab, Microsoft 365, Dolibarr, ...).
+title: "[Plugin]: "
+labels: ["enhancement", "plugin"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing a new integration! Opening this issue **before coding** lets maintainers confirm nobody is already working on it and flag any known pitfalls.
+
+        Please read the **Plugin Development Guide** (`docs/markdown/PLUGIN.md`) first, it walks through the architecture, every interface, and a complete example.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      options:
+        - label: I searched the existing issues and PRs and this source is not already proposed or in progress.
+          required: true
+        - label: I read the Plugin Development Guide.
+          required: true
+
+  - type: input
+    id: source-name
+    attributes:
+      label: IAM source
+      description: Name of the tool or platform to integrate.
+      placeholder: "Keycloak"
+    validations:
+      required: true
+
+  - type: input
+    id: api-docs
+    attributes:
+      label: API documentation
+      description: Link to the official API documentation of the source.
+      placeholder: "https://..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: auth
+    attributes:
+      label: Authentication method
+      description: How does the API authenticate? (API token, OAuth2, service account, ...)
+    validations:
+      required: true
+
+  - type: textarea
+    id: data
+    attributes:
+      label: Available data
+      description: Which entities can be collected from this source? (identities/users, assets/groups/projects, accesses/permissions, ...)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: implementation
+    attributes:
+      label: Are you willing to implement it?
+      options:
+        - Yes, I plan to implement it myself
+        - I can help, but I would need guidance
+        - No, this is only a suggestion
+    validations:
+      required: true

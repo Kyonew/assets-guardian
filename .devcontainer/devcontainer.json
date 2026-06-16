@@ -1,0 +1,123 @@
+{
+  // Name displayed in VS Code (status bar, container selector, etc.).
+  "name": "Assets Guardian",
+
+  // Base Docker image: official Microsoft Dev Containers image, with Python 3.13 pre-installed on Debian 13 "Trixie". It also includes a ready-to-use non-root `vscode` user, git, zsh, oh-my-zsh, and common build tools.
+  "image": "mcr.microsoft.com/devcontainers/python:3.13-trixie",
+
+  // The key word "features" are reusable modules that add tools to the container without needing to write a custom Dockerfile
+  "features": {
+    // Enables running Docker INSIDE the container (dockerd + CLI). Useful because of the project needs to build/run Docker images (integration tests, docker-compose, etc.).
+    "ghcr.io/devcontainers/features/docker-in-docker:3.0.1": {
+      "moby": false,
+      // Skips downloading the legacy standalone `docker-compose` binary from GitHub (flaky download that fails checksum verification when GitHub returns an empty .sha256 file). The Compose V2 plugin (`docker compose`) is still installed via apt.
+      "dockerDashComposeVersion": "none"
+    },
+
+    // Installs `uv`, the ultra-fast Python package/project manager by Astral.
+    "ghcr.io/va-h/devcontainers-features/uv:1.1.4": {
+      "shellAutocompletion": true // Enables automatic shell completion.
+    }
+  },
+
+  // Environment variables injected into the container. All prefixed with UV_* to configure `uv` behavior.
+  "containerEnv": {
+    // File linking mode from cache to venv. The value "copy" avoids hardlink issues across different filesystems (typical when the cache is on a separate Docker volume).
+    "UV_LINK_MODE": "copy",
+
+    // Location of the project venv created by uv. By default uv places it in the project folder, but here it is moved to the user's home to avoid polluting the workspace and so the venv survives branch switches or directory changes.
+    "UV_PROJECT_ENVIRONMENT": "/home/vscode/.venv",
+
+    // Location of the uv cache. Deliberately placed in the home directory to be mounted as a persistent volume (see "mounts").
+    "UV_CACHE_DIR": "/home/vscode/.cache/uv"
+  },
+
+  "remoteEnv": {
+    // Adds the uv venv to the container PATH so installed tools are directly accessible. Fix for pre-commit used by git.
+    "PATH": "/home/vscode/.venv/bin:${containerEnv:PATH}"
+  },
+
+  // Docker mounts between the host/volumes and the container.
+  "mounts": [
+    // 1) Named Docker volume that persists across container rebuilds. The uv cache is therefore not rebuilt each time: huge time saver.
+    "source=assets-guardian-uv-cache,target=/home/vscode/.cache/uv,type=volume",
+
+    // 2) Shares the host git config (name, email, aliases, etc.) as read-only: commits inside the container keep your identity.
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,readonly",
+
+    // 3) Temporary workaround: native SSH agent forwarding does not work correctly. Shares your SSH folder (private keys, config, known_hosts) as read-only: you can git push to GitLab without reconfiguring.
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly"
+  ],
+
+  // Command run ONCE, right after the container is created (even before the workspace is stably mounted). Here: ownership of the cache is given to the `vscode` user because the Docker volume is initially owned by root.
+  "onCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.cache",
+
+  // Command to update dependencies after a pyproject.toml or uv.lock change.
+  "updateContentCommand": "uv sync --frozen --all-groups",
+
+  // Command run after updateContentCommand. Registers git hooks (pre-commit, pre-push) into .git/hooks/. The pre-commit is installed as a package by uv sync, but the hooks must be explicitly registered once.
+  "postCreateCommand": "uv run pre-commit install",
+
+  // Customizations specific to Dev Containers clients.
+  "customizations": {
+    "vscode": {
+      // Extensions automatically installed in the container.
+      "extensions": [
+        // Python
+        "ms-python.python", // Basic Python support
+        "ms-python.debugpy", // Python debugger
+        "ms-python.vscode-pylance", // Language server (IntelliSense, types)
+        "ms-python.mypy-type-checker", // mypy integration (static typing)
+        "charliermarsh.ruff", // Ruff linter + formatter (replaces black/isort/flake8)
+        // Git
+        "eamodio.gitlens", // Enhanced git history, inline blame
+        "mhutchie.git-graph", // Git branch graph visualizer
+        "vivaxy.vscode-conventional-commits",// Assistant for Conventional Commits
+        // Files and formats
+        "tamasfe.even-better-toml", // TOML support (pyproject.toml, etc.)
+        "redhat.vscode-yaml", // YAML support with JSON Schema validation
+        "davidanson.vscode-markdownlint", // Markdown linting
+        "grapecity.gc-excelviewer", // xlsx/csv viewer in VS Code
+        "tomoki1207.pdf", // PDF viewer
+        // AI
+        "anthropic.claude-code", // Claude Code for VS Code
+        // Developer experience
+        "usernamehw.errorlens" // Inline display of errors and warnings
+      ],
+
+      // VS Code settings applied to the container workspace.
+      "settings": {
+        // Points VS Code to the interpreter from the uv-created venv.
+        "python.defaultInterpreterPath": "/home/vscode/.venv/bin/python",
+
+        // Does NOT automatically activate the venv in the terminal. Recommended with uv: use `uv run` rather than manual activation.
+        "python.terminal.activateEnvironment": false,
+        // prompt format: vscode -> /path (branch_name) $
+
+        // Enables pytest as the default test framework.
+        "python.testing.pytestEnabled": true,
+
+        // Settings specific to Python files.
+        "[python]": {
+          // Ruff becomes the default formatter.
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          // Automatic formatting on every save.
+          "editor.formatOnSave": true,
+          // Automatic actions on save:
+          "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit", // fix everything Ruff can fix
+            "source.organizeImports": "explicit" // sort imports (replaces isort)
+          }
+        },
+
+        // Ruff/mypy use the version installed in the venv, not the one bundled in the extension, consistent with CI.
+        "ruff.importStrategy": "fromEnvironment",
+        "mypy-type-checker.importStrategy": "fromEnvironment",
+
+        // Code quality: final newline + trailing whitespace removal.
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true
+      }
+    }
+  }
+}

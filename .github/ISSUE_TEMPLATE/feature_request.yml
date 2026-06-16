@@ -1,0 +1,48 @@
+name: 💡 Feature Request
+description: Suggest an improvement or a new capability for Assets Guardian.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement! Describe the **problem** you are trying to solve, not just the solution you have in mind.
+
+        > 🧩 If you want to integrate a **new IAM source**, use the *Plugin Proposal* template instead.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      options:
+        - label: I searched the existing issues and this feature has not been requested yet.
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What is currently hard, impossible, or annoying?
+      placeholder: "As a security officer, I cannot ... which forces me to ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: Who benefits, how often, and in which context? This helps maintainers understand the value and scope.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution (optional)
+      description: Sketches, diagrams, or pseudo-code are all welcome. Leave empty if you have no specific solution in mind.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered (optional)
+      description: Workarounds you tried, or other approaches you ruled out and why.

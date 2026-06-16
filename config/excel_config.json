@@ -1,0 +1,71 @@
+{
+    "sheet_name": [
+        {
+            "rule_type": "Rules are by default aply to entire column"
+        }
+    ],
+    "Access Review Scope List": [
+        {
+            "column_name": "Asset",
+            "rules": []
+        },
+        {
+            "column_name": "Asset Location",
+            "rules": []
+        },
+        {
+            "column_name": "Access Review Method",
+            "rules": [
+                {
+                    "rule_type": "list_validation",
+                    "validate": "list",
+                    "source": ["Automated (Assets Guardian)", "Partial Automated", "Manual"]
+                }
+            ]
+        },
+        {
+            "column_name": "Latest Access Review (UTC)",
+            "rules": [
+                {
+                    "validate": "date",
+                    "timezone": "UTC"
+                }
+            ]
+
+        },
+        {
+            "column_name": "Author",
+            "rules": []
+        },
+        {
+            "column_name": "Latest Sync (UTC)",
+            "rules": [
+                {
+                    "validate": "date",
+                    "timezone": "UTC"
+                }
+            ]
+        },
+        {
+            "column_name": "Sync Author",
+            "rules": []
+        }
+    ],
+    "Employees list": [
+        {
+            "column_name": "First Name"
+        },
+        {
+            "column_name": "Last Name"
+        },
+        {
+            "column_name": "Email"
+        },
+        {
+            "column_name": "Username"
+        },
+        {
+            "column_name": "Access Profiles"
+        }
+    ]
+}

@@ -1,0 +1,5 @@
+# Force LF everywhere, avoids CRLF issues between WSL and native Ubuntu.
+* text=auto eol=lf
+
+# Binary files, disable line ending conversion and text diffing for PNG files
+*.png binary
