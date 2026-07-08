@@ -1,0 +1,251 @@
+{
+  "Dolibarr Users": {
+    "data_source": "identities",
+    "columns": [
+      {
+        "column_name": "User ID",
+        "field": "external_id",
+        "is_primary_key": true,
+        "width": 10
+      },
+      {
+        "column_name": "Account Type",
+        "is_preserved": true,
+        "width": 20
+      },
+      {
+        "column_name": "Status",
+        "field": "state",
+        "width": 20,
+        "mapping": {
+          "Active": "active",
+          "Inactive": "inactive"
+        },
+        "rules": [
+          {
+            "rule_type": "list_validation",
+            "validate": "list",
+            "source": [
+              "Active",
+              "Inactive"
+            ]
+          },
+          {
+            "rule_type": "conditional_format",
+            "criteria": "==",
+            "value": "Inactive",
+            "format": "yellow"
+          }
+        ]
+      },
+      {
+        "column_name": "First Name",
+        "field": "first_name",
+        "width": 20
+      },
+      {
+        "column_name": "Last Name",
+        "field": "last_name",
+        "width": 20
+      },
+      {
+        "column_name": "Email",
+        "field": "email",
+        "width": 30
+      },
+      {
+        "column_name": "Job",
+        "field": "description",
+        "width": 20
+      },
+      {
+        "column_name": "Role",
+        "field": "is_privileged",
+        "width": 20,
+        "mapping": {
+          "Superadmin": true,
+          "User": false
+        }
+      },
+      {
+        "column_name": "Username",
+        "field": "username",
+        "width": 20
+      },
+      {
+        "column_name": "Creation Date",
+        "field": "created_at",
+        "width": 20
+      },
+      {
+        "column_name": "Last Sign-In (UTC)",
+        "field": "last_sign_in_at",
+        "width": 20
+      },
+      {
+        "column_name": "Last Sign-In IP",
+        "field": "last_sign_in_ip",
+        "width": 20
+      },
+      {
+        "column_name": "Previous Sign-In (UTC)",
+        "field": "previous_sign_in_at",
+        "width": 20
+      },
+      {
+        "column_name": "Previous Sign-In IP",
+        "field": "previous_sign_in_ip",
+        "width": 20
+      },
+      {
+        "column_name": "2FA",
+        "field": "mfa_enabled",
+        "width": 20,
+        "mapping": {
+          "Enabled": true,
+          "Disabled": false
+        },
+        "rules": [
+          {
+            "rule_type": "list_validation",
+            "validate": "list",
+            "source": [
+              "Enabled",
+              "Disabled"
+            ]
+          },
+          {
+            "rule_type": "conditional_format",
+            "criteria": "==",
+            "value": "Disabled",
+            "format": "red"
+          }
+        ]
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 30
+      }
+    ]
+  },
+  "Dolibarr User Permissions": {
+    "data_source": "accesses",
+    "filter_by_asset_type": "module",
+    "columns": [
+      {
+        "column_name": "User ID",
+        "field": "user_external_id",
+        "is_primary_key": true,
+        "width": 10
+      },
+      {
+        "column_name": "Username",
+        "field": "user_username",
+        "width": 20
+      },
+      {
+        "column_name": "Module",
+        "field": "module",
+        "is_primary_key": true,
+        "width": 20
+      },
+      {
+        "column_name": "Permissions",
+        "field": "name",
+        "width": 30
+      },
+      {
+        "column_name": "Label",
+        "field": "permission_label",
+        "width": 20
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 30
+      }
+    ]
+  },
+  "Dolibarr Groups": {
+    "data_source": "accesses",
+    "filter_by_asset_type": "group",
+    "columns": [
+      {
+        "column_name": "User ID",
+        "field": "user_external_id",
+        "is_primary_key": true,
+        "width": 10
+      },
+      {
+        "column_name": "Username",
+        "field": "user_username",
+        "width": 20
+      },
+      {
+        "column_name": "Group ID",
+        "field": "group_id",
+        "is_primary_key": true,
+        "width": 10
+      },
+      {
+        "column_name": "Group Name",
+        "field": "group_name",
+        "width": 20
+      },
+      {
+        "column_name": "Description",
+        "field": "description",
+        "width": 30
+      },
+      {
+        "column_name": "Creation date",
+        "field": "start_at",
+        "width": 20
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 30
+      }
+    ]
+  },
+  "Dolibarr Group Permissions": {
+    "data_source": "accesses",
+    "filter_by_asset_type": "group_permission",
+    "columns": [
+      {
+        "column_name": "Group ID",
+        "field": "group_id",
+        "is_primary_key": true,
+        "width": 10
+      },
+      {
+        "column_name": "Group Name",
+        "field": "group_name",
+        "width": 20
+      },
+      {
+        "column_name": "Module",
+        "field": "module",
+        "is_primary_key": true,
+        "width": 20
+      },
+      {
+        "column_name": "Permissions",
+        "field": "name",
+        "width": 30
+      },
+      {
+        "column_name": "Label",
+        "field": "permission_label",
+        "width": 20
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 30
+      }
+    ]
+  }
+}

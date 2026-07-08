@@ -1,0 +1,161 @@
+{
+  "Template Users": {
+    "data_source": "identities",
+    "columns": [
+      {
+        "column_name": "User ID",
+        "field": "external_id",
+        "is_primary_key": true,
+        "width": 15
+      },
+      {
+        "column_name": "Account Type",
+        "is_preserved": true,
+        "width": 20
+      },
+      {
+        "column_name": "Username",
+        "field": "username",
+        "width": 20
+      },
+      {
+        "column_name": "Full Name",
+        "field": "name",
+        "width": 25
+      },
+      {
+        "column_name": "Email",
+        "field": "email",
+        "width": 30
+      },
+      {
+        "column_name": "State",
+        "field": "state",
+        "width": 15,
+        "mapping": {
+          "Active": "active",
+          "Blocked": "blocked"
+        },
+        "rules": [
+          {
+            "rule_type": "list_validation",
+            "validate": "list",
+            "source": [
+              "Active",
+              "Blocked"
+            ]
+          },
+          {
+            "rule_type": "conditional_format",
+            "criteria": "==",
+            "value": "Blocked",
+            "format": "yellow"
+          }
+        ]
+      },
+      {
+        "column_name": "2FA",
+        "field": "mfa_enabled",
+        "width": 15,
+        "mapping": {
+          "Enabled": true,
+          "Disabled": false
+        },
+        "rules": [
+          {
+            "rule_type": "list_validation",
+            "validate": "list",
+            "source": [
+              "Enabled",
+              "Disabled"
+            ]
+          },
+          {
+            "rule_type": "conditional_format",
+            "criteria": "==",
+            "value": "Disabled",
+            "format": "red"
+          }
+        ]
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 40
+      }
+    ]
+  },
+  "Template Assets": {
+    "data_source": "assets",
+    "columns": [
+      {
+        "column_name": "Asset ID",
+        "field": "external_id",
+        "is_primary_key": true,
+        "width": 20
+      },
+      {
+        "column_name": "Asset Name",
+        "field": "name",
+        "width": 30
+      },
+      {
+        "column_name": "Asset Type",
+        "field": "asset_type",
+        "width": 20
+      },
+      {
+        "column_name": "State",
+        "field": "state",
+        "width": 15
+      },
+      {
+        "column_name": "Description",
+        "field": "description",
+        "width": 40
+      },
+      {
+        "column_name": "Review Status",
+        "is_preserved": true,
+        "width": 30
+      }
+    ]
+  },
+  "Template Accesses": {
+    "data_source": "accesses",
+    "columns": [
+      {
+        "column_name": "Asset ID",
+        "field": "asset_external_id",
+        "is_primary_key": true,
+        "width": 20
+      },
+      {
+        "column_name": "Asset Name",
+        "field": "asset_name",
+        "width": 30
+      },
+      {
+        "column_name": "User ID",
+        "field": "user_external_id",
+        "is_primary_key": true,
+        "width": 15
+      },
+      {
+        "column_name": "User Name",
+        "field": "user_name",
+        "width": 25
+      },
+      {
+        "column_name": "Role",
+        "field": "name",
+        "width": 20
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 40
+      }
+    ]
+  }
+}
