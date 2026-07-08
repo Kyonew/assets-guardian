@@ -19,7 +19,7 @@ Every kind of contribution counts. Pick the one that matches your time and exper
 
 **🚦 Before You Start**
 
-- **Read the documentation first.** The [documentation](https://apizee.github.io/assets-guardian/) covers the architecture, the plugin system, and the configuration — most questions are already answered there.
+- **Read the documentation first.** The [documentation](https://apizee.github.io/assets-guardian/) covers the architecture, the plugin system, and the configuration, most questions are already answered there.
 - **Search.** Check the existing issues and PRs to avoid duplicates.
 - **One concern per issue/PR.** Mixing unrelated changes makes review harder and slows merging.
 - **Discuss before large changes.** If you plan a significant refactor or new feature, open an issue first so we can align before you invest time coding.

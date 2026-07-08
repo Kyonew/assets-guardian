@@ -68,7 +68,7 @@ On the service account's card (**Admin area → Overview → Users → Edit**), 
 
 | Why Assets Guardian needs it |
 | :--- |
-| `GET /users`, `GET /users/{id}`: collect the user list and their details (state, MFA, admin flag, sign-in IPs) — the admin-only attributes are hidden from regular users |
+| `GET /users`, `GET /users/{id}`: collect the user list and their details (state, MFA, admin flag, sign-in IPs), the admin-only attributes are hidden from regular users |
 | `GET /users/{id}/memberships`: collect each user's project and group memberships (admin-only endpoint) |
 | `GET /projects`, `GET /groups`: collect the assets that accesses are mapped to |
 

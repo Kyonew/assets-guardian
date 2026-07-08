@@ -1,5 +1,5 @@
 <!--
-  TEMPLATE — How to use this file:
+  TEMPLATE: How to use this file:
   1. Copy it into your plugin folder: src/assets_guardian/plugins/<your_plugin>/CREDENTIALS.md
   2. Replace every `<...>` placeholder (kept in code spans so markdownlint stays quiet) and every `template` occurrence with your plugin's values.
   3. Resolve the `TODO` comments, then delete them (this header included).

@@ -27,7 +27,7 @@ uninstall: ## Remove the standalone assets-guardian command (uv tool)
 		uv tool uninstall assets-guardian; \
 		printf "\033[32m✓\033[0m 'assets-guardian' uninstalled.\n"; \
 	else \
-		printf "\033[33m⚠\033[0m  Not installed as a 'uv tool' — nothing to uninstall.\n"; \
+		printf "\033[33m⚠\033[0m  Not installed as a 'uv tool', nothing to uninstall.\n"; \
 	fi
 	@if command -v assets-guardian >/dev/null 2>&1; then \
 		printf "\033[33m⚠\033[0m  '%s' is still on your PATH (provided by the project venv, not 'uv tool').\n" "$$(command -v assets-guardian)"; \

@@ -19,7 +19,7 @@ The tool runs as a **non-interactive CLI**, designed for CI/CD pipelines, schedu
 
 Assets Guardian is organized around a central `core/` package, a thin `cli/` entry point, shared `utils/`, and a separate `plugins/` boundary. Inside `core/`, each sub-package has a single responsibility and depends only on the packages below it.
 
-> TODO: Make the diagram below easier to read — accurate but hard to follow (idea: add colors and arrows).
+> TODO: Make the diagram below easier to read, accurate but hard to follow (idea: add colors and arrows).
 
 ```mermaid
 graph TD
@@ -48,7 +48,7 @@ graph TD
 | Package | Responsibility |
 | --- | --- |
 | **CLI** (`cli/`) | Parses arguments, builds the execution `Context`, routes to the right command handler. |
-| **Core** (`core/`) | The application heart. Groups the sub-packages below — everything that is not the `cli/` entry point, the shared `utils/`, or a `plugins/` adapter lives here. |
+| **Core** (`core/`) | The application heart. Groups the sub-packages below, everything that is not the `cli/` entry point, the shared `utils/`, or a `plugins/` adapter lives here. |
 | → **Domain** (`core/domain/`) | Orchestrates business logic through engines. Defines abstract interfaces (ports) that plugins implement. |
 | → **Reporting** (`core/reporting/`) | Adapters around the report artifacts: Excel sheet builders and PDF generation. |
 | → **Clients** (`core/clients/`) | Low-level technical clients (HTTP, MySQL) used by plugin adapters to reach external systems. They implement no domain port, plugins wrap them behind `IClientProvider`. |
@@ -224,9 +224,9 @@ A plugin is a directory under `plugins/` that adapts a specific external system 
 | `mapper.py` | Yes | Normalizes raw data responses into domain models (`Identity`, `Asset`, `Access`) |
 | `collector.py` | Yes | Implements `Collector` - orchestrates repositories and mappers |
 | `rules.py` | No | Plugin-specific compliance rules evaluated during `audit`. Acts as the entry point that re-exports the rule classes defined in `compare.py`, `matrix.py` and `compliance.py` |
-| `compare.py` | No | Comparison rules (`IComparisonRule`) — live run vs the last Excel sync baseline |
-| `matrix.py` | No | Matrix rules (`IMatrixRule`) — active grants vs the expected access matrix |
-| `compliance.py` | No | Compliance rules (`IComplianceRule`) — criteria checked on live identities/assets |
+| `compare.py` | No | Comparison rules (`IComparisonRule`), live run vs the last Excel sync baseline |
+| `matrix.py` | No | Matrix rules (`IMatrixRule`), active grants vs the expected access matrix |
+| `compliance.py` | No | Compliance rules (`IComplianceRule`), criteria checked on live identities/assets |
 | `sheet_builders.py` | No | Custom Excel sheet layouts injected during `sync` |
 | `pdf_builder.py` | No | Custom PDF sections injected during `audit` report generation |
 | `constants.py` | No | Source-specific constants (role names, access levels, etc.) |
@@ -306,7 +306,7 @@ One thing to note:
   | `IComparisonRule` | **Comparison** | State check comparing current live run against the last Excel sync baseline. | `COMPARE-001` (GitLab user added) |
   | `IMatrixRule` | **Matrix** | Comparing active access grants with the expected access defined in the access matrix tab. | `MATRIX-001` (Dolibarr admin compliance) |
 
-The registries are global singletons. After discovery, the factory function `instantiate_collectors(integrations_config)` (in `core/domain/registry/collector_factory.py`) returns a ready-to-use collector instance for every configured `(source, instance)` pair — e.g. a `GitlabCollector`, without the engines ever knowing the concrete classes.
+The registries are global singletons. After discovery, the factory function `instantiate_collectors(integrations_config)` (in `core/domain/registry/collector_factory.py`) returns a ready-to-use collector instance for every configured `(source, instance)` pair, e.g. a `GitlabCollector`, without the engines ever knowing the concrete classes.
 
 ### Multi-instance support
 

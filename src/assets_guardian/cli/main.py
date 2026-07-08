@@ -56,7 +56,7 @@ def cli(
     quiet: bool,
     no_interaction: bool,
 ) -> None:
-    """Assets Guardian — IAM governance tool."""
+    """Assets Guardian, IAM governance tool."""
     # The dictionary or context object will be initialized at the end of the cli method.
 
     # Loads the raw YAML configuration from the path passed as CLI parameter.

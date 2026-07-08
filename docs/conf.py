@@ -2,12 +2,13 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-# Source code lives in src/ — required for autodoc
+# Source code lives in src/
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+from assets_guardian.core.config.loader import get_project_version
 
 # Project
-project = "Assets Guardian (0.0.0)"
+project = f"Assets Guardian ({get_project_version()})"
 copyright = f"{datetime.now(UTC).year}, Apizee"  # noqa: A001
 author = "Apizee"
 

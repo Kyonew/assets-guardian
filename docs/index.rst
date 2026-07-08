@@ -24,3 +24,9 @@ Audit identities, access rights, and security compliance across all solutions in
    :caption: Code Reference
 
    src/cli
+   src/domain
+   src/plugins
+   src/reporting
+   src/clients
+   src/plumbing
+   src/utils
