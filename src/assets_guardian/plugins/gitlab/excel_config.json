@@ -1,0 +1,275 @@
+{
+  "Gitlab Users": {
+    "data_source": "identities",
+    "columns": [
+      {
+        "column_name": "User ID",
+        "field": "external_id",
+        "is_primary_key": true,
+        "width": 12
+      },
+      {
+        "column_name": "Account Type",
+        "is_preserved": true,
+        "width": 15
+      },
+      {
+        "column_name": "Full Name",
+        "field": "name",
+        "width": 30
+      },
+      {
+        "column_name": "Username",
+        "field": "username",
+        "width": 20
+      },
+      {
+        "column_name": "Email",
+        "field": "email",
+        "width": 35
+      },
+      {
+        "column_name": "2FA",
+        "field": "mfa_enabled",
+        "width": 12,
+        "mapping": {
+          "Enabled": true,
+          "Disabled": false
+        },
+        "rules": [
+          {
+            "rule_type": "list_validation",
+            "validate": "list",
+            "source": [
+              "Enabled",
+              "Disabled"
+            ]
+          },
+          {
+            "rule_type": "conditional_format",
+            "criteria": "==",
+            "value": "Disabled",
+            "format": "red"
+          }
+        ]
+      },
+      {
+        "column_name": "External",
+        "field": "is_external",
+        "width": 12,
+        "mapping": {
+          "True": true,
+          "False": false
+        },
+        "rules": [
+          {
+            "rule_type": "list_validation",
+            "validate": "list",
+            "source": [
+              "True",
+              "False"
+            ]
+          }
+        ]
+      },
+      {
+        "column_name": "Administrator",
+        "field": "is_privileged",
+        "width": 15,
+        "mapping": {
+          "True": true,
+          "False": false
+        },
+        "rules": [
+          {
+            "rule_type": "list_validation",
+            "validate": "list",
+            "source": [
+              "True",
+              "False"
+            ]
+          },
+          {
+            "rule_type": "conditional_format",
+            "criteria": "==",
+            "value": "True",
+            "format": "orange"
+          }
+        ]
+      },
+      {
+        "column_name": "State",
+        "field": "state",
+        "width": 12,
+        "mapping": {
+          "Active": "active",
+          "Blocked": "blocked"
+        },
+        "rules": [
+          {
+            "rule_type": "list_validation",
+            "validate": "list",
+            "source": [
+              "Active",
+              "Blocked"
+            ]
+          },
+          {
+            "rule_type": "conditional_format",
+            "criteria": "==",
+            "value": "Blocked",
+            "format": "yellow"
+          }
+        ]
+      },
+      {
+        "column_name": "Last Activity (UTC)",
+        "field": "last_activity_at",
+        "width": 22
+      },
+      {
+        "column_name": "Current Sign-In (UTC)",
+        "field": "current_sign_in_at",
+        "width": 22
+      },
+      {
+        "column_name": "Current Sign-In IP",
+        "field": "current_sign_in_ip",
+        "width": 18,
+        "rules": [
+          {
+            "rule_type": "conditional_format",
+            "criteria": "!=",
+            "value": [
+              "192.0.2.1",
+              ""
+            ],
+            "format": "red"
+          }
+        ]
+      },
+      {
+        "column_name": "Last Sign-In (UTC)",
+        "field": "last_sign_in_at",
+        "width": 22
+      },
+      {
+        "column_name": "Last Sign-In IP",
+        "field": "last_sign_in_ip",
+        "width": 18,
+        "rules": [
+          {
+            "rule_type": "conditional_format",
+            "criteria": "!=",
+            "value": [
+              "192.0.2.1",
+              ""
+            ],
+            "format": "red"
+          }
+        ]
+      },
+      {
+        "column_name": "Member Since",
+        "field": "created_at",
+        "width": 22
+      },
+      {
+        "column_name": "Created By",
+        "field": "created_by",
+        "width": 20
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 50
+      }
+    ]
+  },
+  "Gitlab Groups": {
+    "data_source": "accesses",
+    "filter_by_asset_type": "group",
+    "columns": [
+      {
+        "column_name": "Group ID",
+        "field": "asset_external_id",
+        "is_primary_key": true,
+        "width": 12
+      },
+      {
+        "column_name": "Group Name",
+        "field": "asset_name",
+        "width": 35
+      },
+      {
+        "column_name": "Member ID",
+        "field": "user_external_id",
+        "is_primary_key": true,
+        "width": 12
+      },
+      {
+        "column_name": "Member Name",
+        "field": "user_name",
+        "width": 30
+      },
+      {
+        "column_name": "Role",
+        "field": "name",
+        "width": 15
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 50
+      }
+    ]
+  },
+  "Gitlab Projects": {
+    "data_source": "accesses",
+    "filter_by_asset_type": "project",
+    "columns": [
+      {
+        "column_name": "Group ID",
+        "field": "asset_parent_id",
+        "width": 12
+      },
+      {
+        "column_name": "Group Name",
+        "field": "asset_parent_name",
+        "width": 35
+      },
+      {
+        "column_name": "Project ID",
+        "field": "asset_external_id",
+        "is_primary_key": true,
+        "width": 12
+      },
+      {
+        "column_name": "Project Name",
+        "field": "asset_name",
+        "width": 25
+      },
+      {
+        "column_name": "Member ID",
+        "field": "user_external_id",
+        "is_primary_key": true,
+        "width": 15
+      },
+      {
+        "column_name": "Member Username",
+        "field": "user_username",
+        "width": 25
+      },
+      {
+        "column_name": "Role",
+        "field": "name",
+        "width": 15
+      },
+      {
+        "column_name": "Comments",
+        "is_preserved": true,
+        "width": 50
+      }
+    ]
+  }
+}

@@ -1,6 +1,14 @@
 """Assets Guardian CLI entry point."""
 
+import logging
+
 import click
+
+from assets_guardian.core.config.app_config import AppConfig
+from assets_guardian.core.config.loader import get_project_version, load_yaml_config
+from assets_guardian.core.domain.models.context import AssetsGuardianMode, Context
+from assets_guardian.core.domain.registry.discovery import discover_all
+from assets_guardian.core.logging.logger import init_logging
 
 from .audit import run_audit_command
 from .check import run_check_command
@@ -33,60 +41,85 @@ class AssetsGuardianGroup(click.Group):
 
 
 @click.group(cls=AssetsGuardianGroup)
-@click.version_option(version="0.0.0", prog_name="assets-guardian")
-@click.option(
-    "--config", "_config", default="config/config.yml", help="Path to the configuration file."
-)
-@click.option("--dry-run", "_dry_run", is_flag=True, help="Simulation mode without side effects.")
-@click.option("-v", "--verbose", "_verbose", is_flag=True, help="DEBUG logs in the console.")
-@click.option("-q", "--quiet", "_quiet", is_flag=True, help="ERROR logs only.")
-@click.option("--no-interaction", "_no_interaction", is_flag=True, help="Non-interactive mode.")
+@click.version_option(version=get_project_version(), prog_name="assets-guardian")
+@click.option("--config", default="config/config.yml", help="Path to the configuration file.")
+@click.option("--dry-run", is_flag=True, help="Simulation mode without side effects.")
+@click.option("-v", "--verbose", is_flag=True, help="DEBUG logs in the console.")
+@click.option("-q", "--quiet", is_flag=True, help="ERROR logs only.")
+@click.option("--no-interaction", is_flag=True, help="Non-interactive mode.")
 @click.pass_context
 def cli(
-    _ctx: click.Context,
-    _config: str,
-    _dry_run: bool,
-    _verbose: bool,
-    _quiet: bool,
-    _no_interaction: bool,
+    ctx: click.Context,
+    config: str,
+    dry_run: bool,
+    verbose: bool,
+    quiet: bool,
+    no_interaction: bool,
 ) -> None:
     """Assets Guardian — IAM governance tool."""
-    print("Run Assets Guardian.")  # noqa: T201
+    # The dictionary or context object will be initialized at the end of the cli method.
+
+    # Loads the raw YAML configuration from the path passed as CLI parameter.
+    config_parameters = load_yaml_config(config)
+    app_config = AppConfig.create_from_dict(config_parameters, config_path=config)
+
+    # Determines the console logging level by applying the CLI options
+    # (verbose/quiet) which take priority over the default configuration.
+    if verbose:
+        app_config.logging.console_level = logging.DEBUG
+    elif quiet:
+        app_config.logging.console_level = logging.CRITICAL
+
+    # Initializes the logging system (log files and console output).
+    init_logging(logging_config=app_config.logging)
+
+    # Since loggers are now operational, all events can be traced from here.
+    ctx.obj = Context(
+        app_config=app_config,
+        dry_run=dry_run,
+        verbose=verbose,
+        quiet=quiet,
+        no_interaction=no_interaction,
+        mode=AssetsGuardianMode(ctx.invoked_subcommand or AssetsGuardianMode.UNRECOGNIZED),
+    )
+
+    # Dynamically discovers and registers all installed plugins and their rules.
+    discover_all(ctx.obj)
 
 
 @cli.command()
 @click.pass_context
-def sync(_ctx: click.Context) -> None:
+def sync(ctx: click.Context) -> None:
     """Synchronizes the permissions Excel repository.
 
     This command connects to the configured data sources to extract current permissions
     information, then updates the reference Excel file while preserving manual changes
     and specific tabs.
     """
-    run_sync_command()
+    run_sync_command(ctx.obj)
 
 
 @cli.command()
 @click.pass_context
-def audit(_ctx: click.Context) -> None:
+def audit(ctx: click.Context) -> None:
     """Executes a comprehensive IAM compliance audit.
 
     This command retrieves data from the Excel file and updated data to evaluate all
     configured compliance, comparison, and security matrix rules. It produces an audit report
     detailing security gaps and vulnerabilities.
     """
-    run_audit_command()
+    run_audit_command(ctx.obj)
 
 
 @cli.command()
 @click.pass_context
-def check(_ctx: click.Context) -> None:
+def check(ctx: click.Context) -> None:
     """Verifies connectivity and status of external sources (Health Check).
 
     This command tests the connection and authentication with all configured APIs
     and databases to ensure their proper operational function.
     """
-    run_check_command()
+    run_check_command(ctx.obj)
 
 
 if __name__ == "__main__":
