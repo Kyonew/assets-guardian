@@ -32,3 +32,6 @@ vulnerabilities:
   - id: CVE-2026-54369
     statement: "libacl1 never invoked."
     expired_at: 2026-12-31
+  - id: CVE-2026-53615
+    statement: "never probes block devices. Non-root container with no disk access."
+    expired_at: 2026-12-31

@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help setup install upgrade uninstall version-show version-bump lint-check lint-format lint-type lint-complexity lint-fix-format test test-coverage security-bandit security-dependency-audit security-gitleaks security-hadolint all clean docs-clean docs-build docs-serve pre-commit-update pre-commit-run local-sync local-audit local-check docker-build docker-sync docker-audit docker-check docker-help kevin kevin-security-plumber
+.PHONY: help setup install upgrade uninstall version-show version-bump lint-check lint-format lint-type lint-complexity lint-fix-format test test-coverage security-bandit security-dependency-audit security-gitleaks security-hadolint security-trivy all clean docs-clean docs-build docs-serve pre-commit-update pre-commit-run local-sync local-audit local-check docker-build docker-sync docker-audit docker-check docker-help kevin kevin-security-plumber
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
@@ -107,7 +107,22 @@ security-hadolint: ## Dockerfile linting with hadolint
 	@docker run --rm -v $(shell pwd)/Dockerfile:/Dockerfile:ro hadolint/hadolint:v2.14.0-debian hadolint /Dockerfile
 	@printf "\033[32m✓\033[0m Hadolint: no issues found.\n"
 
-all: lint-check lint-format lint-type lint-complexity test-coverage security-bandit security-dependency-audit security-gitleaks security-hadolint ## Run all checks
+security-trivy: docker-build ## Build then scan the 'assets-guardian' Docker image with trivy (same gate as CI)
+	@printf "\033[36m▶\033[0m Scanning Docker image 'assets-guardian' with trivy...\n"
+	@docker run --rm \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-v trivy-cache:/root/.cache/trivy \
+		-v $(shell pwd)/.trivyignore.yml:/.trivyignore.yml:ro \
+		aquasec/trivy:0.58.2 image \
+		--exit-code 1 \
+		--scanners vuln \
+		--severity HIGH,CRITICAL \
+		--ignorefile /.trivyignore.yml \
+		--show-suppressed \
+		assets-guardian
+	@printf "\033[32m✓\033[0m Trivy: no HIGH/CRITICAL vulnerabilities found.\n"
+
+all: lint-check lint-format lint-type lint-complexity test-coverage security-bandit security-dependency-audit security-gitleaks security-hadolint security-trivy ## Run all checks
 	@printf "\033[32m✓\033[0m All code checks completed successfully.\n"
 
 clean: ## Clean all tool-generated artifacts (caches, builds, docs, coverage...)
